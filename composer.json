@@ -1,0 +1,20 @@
+{
+    "name": "janyksteenbeek/youtubepartner",
+    "description": "PHP library for Youtube Content ID API v1",
+    "type": "package",
+    "require": {
+        "google/apiclient": "^2.0"
+    },
+    "license": "Apache License 2.0",
+    "authors": [
+        {
+            "name": "Janyk Steenbeek",
+            "email": "info@janyksteenbeek.nl"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "YouTubePartner.php"
+        ]
+    }
+}

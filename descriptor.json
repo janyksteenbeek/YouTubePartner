@@ -1,0 +1,34 @@
+{
+  "files": [
+    {
+      "downloadUrl": "/downloads/youtubePartner/v1/20160726/php/1.1.4/google-youtubePartner-v1-rev20160726-php-1.1.4-src.zip", 
+      "path": "", 
+      "type": "source", 
+      "timestamp": "2016-08-01 20:20"
+    }
+  ], 
+  "ownerDomain": "google.com", 
+  "canonicalName": "YouTube Partner", 
+  "maven": null, 
+  "dependencies": [
+    {
+      "version": "1.1.1", 
+      "downloadLink": "https://github.com/google/google-api-php-client/releases", 
+      "name": "Google API PHP Client", 
+      "environments": [
+        "*"
+      ]
+    }
+  ], 
+  "ownerName": "Google", 
+  "id": "youtubePartner:v1", 
+  "language_version": "1.1.4", 
+  "kind": "discovery#directoryItem", 
+  "moduleName": "com.google", 
+  "name": "youtubePartner", 
+  "language": "php", 
+  "title": "Youtube Content ID API", 
+  "version": "v1", 
+  "revision": 20160726, 
+  "modulePath": "com/google"
+}
