@@ -41,6 +41,7 @@ class Google_Service_YouTubePartner extends Google_Service
   public $assetMatchPolicy;
   public $assetRelationships;
   public $assetSearch;
+  public $assetShares;
   public $assets;
   public $campaigns;
   public $claimHistory;
@@ -53,6 +54,7 @@ class Google_Service_YouTubePartner extends Google_Service
   public $orders;
   public $ownership;
   public $ownershipHistory;
+  public $package;
   public $policies;
   public $publishers;
   public $referenceConflicts;
@@ -273,6 +275,34 @@ class Google_Service_YouTubePartner extends Google_Service
                   'type' => 'string',
                 ),
                 'q' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->assetShares = new Google_Service_YouTubePartner_AssetShares_Resource(
+        $this,
+        $this->serviceName,
+        'assetShares',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'assetShares',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'assetId' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'onBehalfOfContentOwner' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -1003,6 +1033,39 @@ class Google_Service_YouTubePartner extends Google_Service
           )
         )
     );
+    $this->package = new Google_Service_YouTubePartner_Package_Resource(
+        $this,
+        $this->serviceName,
+        'package',
+        array(
+          'methods' => array(
+            'get' => array(
+              'path' => 'package/{packageId}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'packageId' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'onBehalfOfContentOwner' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'insert' => array(
+              'path' => 'package',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'onBehalfOfContentOwner' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
     $this->policies = new Google_Service_YouTubePartner_Policies_Resource(
         $this,
         $this->serviceName,
@@ -1277,6 +1340,24 @@ class Google_Service_YouTubePartner extends Google_Service
           'methods' => array(
             'validate' => array(
               'path' => 'validator',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'onBehalfOfContentOwner' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'validateAsync' => array(
+              'path' => 'validatorAsync',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'onBehalfOfContentOwner' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),'validateAsyncStatus' => array(
+              'path' => 'validatorAsyncStatus',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'onBehalfOfContentOwner' => array(
@@ -1710,6 +1791,49 @@ class Google_Service_YouTubePartner_AssetSearch_Resource extends Google_Service_
 }
 
 /**
+ * The "assetShares" collection of methods.
+ * Typical usage is:
+ *  <code>
+ *   $youtubePartnerService = new Google_Service_YouTubePartner(...);
+ *   $assetShares = $youtubePartnerService->assetShares;
+ *  </code>
+ */
+class Google_Service_YouTubePartner_AssetShares_Resource extends Google_Service_Resource
+{
+
+  /**
+   * This method either retrieves a list of asset shares the partner owns and that
+   * map to a specified asset view ID or it retrieves a list of asset views
+   * associated with a specified asset share ID owned by the partner.
+   * (assetShares.listAssetShares)
+   *
+   * @param string $assetId The assetId parameter specifies the asset ID for which
+   * you are retrieving data. The parameter can be an asset view ID or an asset
+   * share ID. - If the value is an asset view ID, the API response identifies any
+   * asset share ids mapped to the asset view. - If the value is an asset share
+   * ID, the API response identifies any asset view ids that maps to that asset
+   * share.
+   * @param array $optParams Optional parameters.
+   *
+   * @opt_param string pageToken The pageToken parameter specifies a token that
+   * identifies a particular page of results to return. Set this parameter to the
+   * value of the nextPageToken value from the previous API response to retrieve
+   * the next page of search results.
+   * @opt_param string onBehalfOfContentOwner The onBehalfOfContentOwner parameter
+   * identifies the content owner that the user is acting on behalf of. This
+   * parameter supports users whose accounts are associated with multiple content
+   * owners.
+   * @return Google_Service_YouTubePartner_AssetShareListResponse
+   */
+  public function listAssetShares($assetId, $optParams = array())
+  {
+    $params = array('assetId' => $assetId);
+    $params = array_merge($params, $optParams);
+    return $this->call('list', array($params), "Google_Service_YouTubePartner_AssetShareListResponse");
+  }
+}
+
+/**
  * The "assets" collection of methods.
  * Typical usage is:
  *  <code>
@@ -2059,8 +2183,8 @@ class Google_Service_YouTubePartner_ClaimSearch_Resource extends Google_Service_
    * specify what kind of inactive claims you want to find based on the reasons
    * why the claims became inactive.
    * @opt_param string createdAfter The createdAfter parameter allows you to
-   * restrict the set of returned claims to ones originally created after the
-   * specified date (inclusive).
+   * restrict the set of returned claims to ones created on or after the specified
+   * date (inclusive).
    * @opt_param string referenceId The referenceId parameter specifies the YouTube
    * reference ID of the reference for which you are retrieving claims.
    * @opt_param string contentType The contentType parameter specifies the content
@@ -2071,8 +2195,10 @@ class Google_Service_YouTubePartner_ClaimSearch_Resource extends Google_Service_
    * @opt_param string assetId The assetId parameter specifies the YouTube asset
    * ID of the asset for which you are retrieving claims.
    * @opt_param string statusModifiedAfter The statusModifiedAfter parameter
-   * allows you to restrict the set of returned claims to ones with status and/or
-   * status detail modified after the specified date (inclusive).
+   * allows you to restrict the result set to only include claims that have had
+   * their status modified on or after the specified date (inclusive). The date
+   * specified must be on or after June 30, 2016 (2016-06-30). The parameter
+   * value's format is YYYY-MM-DD.
    * @opt_param string status The status parameter restricts your results to only
    * claims in the specified status.
    * @opt_param string onBehalfOfContentOwner The onBehalfOfContentOwner parameter
@@ -2093,11 +2219,13 @@ class Google_Service_YouTubePartner_ClaimSearch_Resource extends Google_Service_
    * parameter to the value of the nextPageToken value from the previous API
    * response to retrieve the next page of search results.
    * @opt_param string statusModifiedBefore The statusModifiedBefore parameter
-   * allows you to restrict the set of returned claims to ones with status and/or
-   * status detail modified before the specified date (exclusive).
+   * allows you to restrict the result set to only include claims that have had
+   * their status modified before the specified date (exclusive). The date
+   * specified must be on or after July 1, 2016 (2016-07-01). The parameter
+   * value's format is YYYY-MM-DD.
    * @opt_param string createdBefore The createdBefore parameter allows you to
-   * restrict the set of returned claims to ones originally created before the
-   * specified date (exclusive).
+   * restrict the set of returned claims to ones created before the specified date
+   * (exclusive).
    * @opt_param string videoId The videoId parameter specifies comma-separated
    * list of YouTube video IDs for which you are retrieving claims.
    * @opt_param bool includeThirdPartyClaims Used along with the videoId parameter
@@ -2719,6 +2847,57 @@ class Google_Service_YouTubePartner_OwnershipHistory_Resource extends Google_Ser
 }
 
 /**
+ * The "package" collection of methods.
+ * Typical usage is:
+ *  <code>
+ *   $youtubePartnerService = new Google_Service_YouTubePartner(...);
+ *   $package = $youtubePartnerService->package;
+ *  </code>
+ */
+class Google_Service_YouTubePartner_Package_Resource extends Google_Service_Resource
+{
+
+  /**
+   * Retrieves information for the specified package. (package.get)
+   *
+   * @param string $packageId The packageId parameter specifies the Content
+   * Delivery package ID of the package being retrieved.
+   * @param array $optParams Optional parameters.
+   *
+   * @opt_param string onBehalfOfContentOwner The onBehalfOfContentOwner parameter
+   * identifies the content owner that the user is acting on behalf of. This
+   * parameter supports users whose accounts are associated with multiple content
+   * owners.
+   * @return Google_Service_YouTubePartner_Package
+   */
+  public function get($packageId, $optParams = array())
+  {
+    $params = array('packageId' => $packageId);
+    $params = array_merge($params, $optParams);
+    return $this->call('get', array($params), "Google_Service_YouTubePartner_Package");
+  }
+
+  /**
+   * Inserts a metadata-only package. (package.insert)
+   *
+   * @param Google_Package $postBody
+   * @param array $optParams Optional parameters.
+   *
+   * @opt_param string onBehalfOfContentOwner The onBehalfOfContentOwner parameter
+   * identifies the content owner that the user is acting on behalf of. This
+   * parameter supports users whose accounts are associated with multiple content
+   * owners.
+   * @return Google_Service_YouTubePartner_PackageInsertResponse
+   */
+  public function insert(Google_Service_YouTubePartner_Package $postBody, $optParams = array())
+  {
+    $params = array('postBody' => $postBody);
+    $params = array_merge($params, $optParams);
+    return $this->call('insert', array($params), "Google_Service_YouTubePartner_PackageInsertResponse");
+  }
+}
+
+/**
  * The "policies" collection of methods.
  * Typical usage is:
  *  <code>
@@ -3127,6 +3306,44 @@ class Google_Service_YouTubePartner_Validator_Resource extends Google_Service_Re
     $params = array('postBody' => $postBody);
     $params = array_merge($params, $optParams);
     return $this->call('validate', array($params), "Google_Service_YouTubePartner_ValidateResponse");
+  }
+
+  /**
+   * Validate a metadata file asynchronously. (validator.validateAsync)
+   *
+   * @param Google_ValidateAsyncRequest $postBody
+   * @param array $optParams Optional parameters.
+   *
+   * @opt_param string onBehalfOfContentOwner The onBehalfOfContentOwner parameter
+   * identifies the content owner that the user is acting on behalf of. This
+   * parameter supports users whose accounts are associated with multiple content
+   * owners.
+   * @return Google_Service_YouTubePartner_ValidateAsyncResponse
+   */
+  public function validateAsync(Google_Service_YouTubePartner_ValidateAsyncRequest $postBody, $optParams = array())
+  {
+    $params = array('postBody' => $postBody);
+    $params = array_merge($params, $optParams);
+    return $this->call('validateAsync', array($params), "Google_Service_YouTubePartner_ValidateAsyncResponse");
+  }
+
+  /**
+   * Get the asynchronous validation status. (validator.validateAsyncStatus)
+   *
+   * @param Google_ValidateStatusRequest $postBody
+   * @param array $optParams Optional parameters.
+   *
+   * @opt_param string onBehalfOfContentOwner The onBehalfOfContentOwner parameter
+   * identifies the content owner that the user is acting on behalf of. This
+   * parameter supports users whose accounts are associated with multiple content
+   * owners.
+   * @return Google_Service_YouTubePartner_ValidateStatusResponse
+   */
+  public function validateAsyncStatus(Google_Service_YouTubePartner_ValidateStatusRequest $postBody, $optParams = array())
+  {
+    $params = array('postBody' => $postBody);
+    $params = array_merge($params, $optParams);
+    return $this->call('validateAsyncStatus', array($params), "Google_Service_YouTubePartner_ValidateStatusResponse");
   }
 }
 
@@ -3826,6 +4043,88 @@ class Google_Service_YouTubePartner_AssetSearchResponse extends Google_Collectio
   protected $internal_gapi_mappings = array(
   );
   protected $itemsType = 'Google_Service_YouTubePartner_AssetSnippet';
+  protected $itemsDataType = 'array';
+  public $kind;
+  public $nextPageToken;
+  protected $pageInfoType = 'Google_Service_YouTubePartner_PageInfo';
+  protected $pageInfoDataType = '';
+
+
+  public function setItems($items)
+  {
+    $this->items = $items;
+  }
+  public function getItems()
+  {
+    return $this->items;
+  }
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+  public function getKind()
+  {
+    return $this->kind;
+  }
+  public function setNextPageToken($nextPageToken)
+  {
+    $this->nextPageToken = $nextPageToken;
+  }
+  public function getNextPageToken()
+  {
+    return $this->nextPageToken;
+  }
+  public function setPageInfo(Google_Service_YouTubePartner_PageInfo $pageInfo)
+  {
+    $this->pageInfo = $pageInfo;
+  }
+  public function getPageInfo()
+  {
+    return $this->pageInfo;
+  }
+}
+
+class Google_Service_YouTubePartner_AssetShare extends Google_Model
+{
+  protected $internal_gapi_mappings = array(
+  );
+  public $kind;
+  public $shareId;
+  public $viewId;
+
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+  public function getKind()
+  {
+    return $this->kind;
+  }
+  public function setShareId($shareId)
+  {
+    $this->shareId = $shareId;
+  }
+  public function getShareId()
+  {
+    return $this->shareId;
+  }
+  public function setViewId($viewId)
+  {
+    $this->viewId = $viewId;
+  }
+  public function getViewId()
+  {
+    return $this->viewId;
+  }
+}
+
+class Google_Service_YouTubePartner_AssetShareListResponse extends Google_Collection
+{
+  protected $collection_key = 'items';
+  protected $internal_gapi_mappings = array(
+  );
+  protected $itemsType = 'Google_Service_YouTubePartner_AssetShare';
   protected $itemsDataType = 'array';
   public $kind;
   public $nextPageToken;
@@ -6229,6 +6528,152 @@ class Google_Service_YouTubePartner_OwnershipHistoryListResponse extends Google_
   }
 }
 
+class Google_Service_YouTubePartner_Package extends Google_Collection
+{
+  protected $collection_key = 'customIds';
+  protected $internal_gapi_mappings = array(
+  );
+  public $content;
+  public $customIds;
+  public $id;
+  public $kind;
+  public $locale;
+  public $name;
+  public $status;
+  public $timeCreated;
+  public $type;
+  public $uploaderName;
+
+
+  public function setContent($content)
+  {
+    $this->content = $content;
+  }
+  public function getContent()
+  {
+    return $this->content;
+  }
+  public function setCustomIds($customIds)
+  {
+    $this->customIds = $customIds;
+  }
+  public function getCustomIds()
+  {
+    return $this->customIds;
+  }
+  public function setId($id)
+  {
+    $this->id = $id;
+  }
+  public function getId()
+  {
+    return $this->id;
+  }
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+  public function getKind()
+  {
+    return $this->kind;
+  }
+  public function setLocale($locale)
+  {
+    $this->locale = $locale;
+  }
+  public function getLocale()
+  {
+    return $this->locale;
+  }
+  public function setName($name)
+  {
+    $this->name = $name;
+  }
+  public function getName()
+  {
+    return $this->name;
+  }
+  public function setStatus($status)
+  {
+    $this->status = $status;
+  }
+  public function getStatus()
+  {
+    return $this->status;
+  }
+  public function setTimeCreated($timeCreated)
+  {
+    $this->timeCreated = $timeCreated;
+  }
+  public function getTimeCreated()
+  {
+    return $this->timeCreated;
+  }
+  public function setType($type)
+  {
+    $this->type = $type;
+  }
+  public function getType()
+  {
+    return $this->type;
+  }
+  public function setUploaderName($uploaderName)
+  {
+    $this->uploaderName = $uploaderName;
+  }
+  public function getUploaderName()
+  {
+    return $this->uploaderName;
+  }
+}
+
+class Google_Service_YouTubePartner_PackageInsertResponse extends Google_Collection
+{
+  protected $collection_key = 'errors';
+  protected $internal_gapi_mappings = array(
+  );
+  protected $errorsType = 'Google_Service_YouTubePartner_ValidateError';
+  protected $errorsDataType = 'array';
+  public $kind;
+  protected $resourceType = 'Google_Service_YouTubePartner_Package';
+  protected $resourceDataType = '';
+  public $status;
+
+
+  public function setErrors($errors)
+  {
+    $this->errors = $errors;
+  }
+  public function getErrors()
+  {
+    return $this->errors;
+  }
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+  public function getKind()
+  {
+    return $this->kind;
+  }
+  public function setResource(Google_Service_YouTubePartner_Package $resource)
+  {
+    $this->resource = $resource;
+  }
+  public function getResource()
+  {
+    return $this->resource;
+  }
+  public function setStatus($status)
+  {
+    $this->status = $status;
+  }
+  public function getStatus()
+  {
+    return $this->status;
+  }
+}
+
 class Google_Service_YouTubePartner_PageInfo extends Google_Model
 {
   protected $internal_gapi_mappings = array(
@@ -7296,6 +7741,76 @@ class Google_Service_YouTubePartner_TerritoryOwners extends Google_Collection
   }
 }
 
+class Google_Service_YouTubePartner_ValidateAsyncRequest extends Google_Model
+{
+  protected $internal_gapi_mappings = array(
+  );
+  public $content;
+  public $kind;
+  public $uploaderName;
+
+
+  public function setContent($content)
+  {
+    $this->content = $content;
+  }
+  public function getContent()
+  {
+    return $this->content;
+  }
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+  public function getKind()
+  {
+    return $this->kind;
+  }
+  public function setUploaderName($uploaderName)
+  {
+    $this->uploaderName = $uploaderName;
+  }
+  public function getUploaderName()
+  {
+    return $this->uploaderName;
+  }
+}
+
+class Google_Service_YouTubePartner_ValidateAsyncResponse extends Google_Model
+{
+  protected $internal_gapi_mappings = array(
+  );
+  public $kind;
+  public $status;
+  public $validationId;
+
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+  public function getKind()
+  {
+    return $this->kind;
+  }
+  public function setStatus($status)
+  {
+    $this->status = $status;
+  }
+  public function getStatus()
+  {
+    return $this->status;
+  }
+  public function setValidationId($validationId)
+  {
+    $this->validationId = $validationId;
+  }
+  public function getValidationId()
+  {
+    return $this->validationId;
+  }
+}
+
 class Google_Service_YouTubePartner_ValidateError extends Google_Model
 {
   protected $internal_gapi_mappings = array(
@@ -7420,6 +7935,87 @@ class Google_Service_YouTubePartner_ValidateResponse extends Google_Collection
   public function getErrors()
   {
     return $this->errors;
+  }
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+  public function getKind()
+  {
+    return $this->kind;
+  }
+  public function setStatus($status)
+  {
+    $this->status = $status;
+  }
+  public function getStatus()
+  {
+    return $this->status;
+  }
+}
+
+class Google_Service_YouTubePartner_ValidateStatusRequest extends Google_Model
+{
+  protected $internal_gapi_mappings = array(
+  );
+  public $kind;
+  public $locale;
+  public $validationId;
+
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+  public function getKind()
+  {
+    return $this->kind;
+  }
+  public function setLocale($locale)
+  {
+    $this->locale = $locale;
+  }
+  public function getLocale()
+  {
+    return $this->locale;
+  }
+  public function setValidationId($validationId)
+  {
+    $this->validationId = $validationId;
+  }
+  public function getValidationId()
+  {
+    return $this->validationId;
+  }
+}
+
+class Google_Service_YouTubePartner_ValidateStatusResponse extends Google_Collection
+{
+  protected $collection_key = 'errors';
+  protected $internal_gapi_mappings = array(
+  );
+  protected $errorsType = 'Google_Service_YouTubePartner_ValidateError';
+  protected $errorsDataType = 'array';
+  public $isMetadataOnly;
+  public $kind;
+  public $status;
+
+
+  public function setErrors($errors)
+  {
+    $this->errors = $errors;
+  }
+  public function getErrors()
+  {
+    return $this->errors;
+  }
+  public function setIsMetadataOnly($isMetadataOnly)
+  {
+    $this->isMetadataOnly = $isMetadataOnly;
+  }
+  public function getIsMetadataOnly()
+  {
+    return $this->isMetadataOnly;
   }
   public function setKind($kind)
   {

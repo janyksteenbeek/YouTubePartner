@@ -1,10 +1,10 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/youtubePartner/v1/20160726/php/1.1.4/google-youtubePartner-v1-rev20160726-php-1.1.4-src.zip", 
+      "downloadUrl": "/downloads/youtubePartner/v1/20170911/php/1.1.4/google-youtubePartner-v1-rev20170911-php-1.1.4-src.zip", 
       "path": "", 
       "type": "source", 
-      "timestamp": "2016-08-01 20:20"
+      "timestamp": "2017-09-15 21:05"
     }
   ], 
   "ownerDomain": "google.com", 
@@ -29,6 +29,6 @@
   "language": "php", 
   "title": "Youtube Content ID API", 
   "version": "v1", 
-  "revision": 20160726, 
+  "revision": 20170911, 
   "modulePath": "com/google"
 }
