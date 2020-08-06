@@ -19,7 +19,7 @@
  * Service definition for YouTubePartner (v1).
  *
  * <p>
- * API for YouTube partners. To use this API YouTube CMS account is required.</p>
+ * API for YouTube partners. To use this API a YouTube CMS account is required.</p>
  *
  * <p>
  * For more information about this service, see the API
@@ -59,6 +59,8 @@ class Google_Service_YouTubePartner extends Google_Service
   public $publishers;
   public $referenceConflicts;
   public $references;
+  public $spreadsheetTemplate;
+  public $uploader;
   public $validator;
   public $videoAdvertisingOptions;
   public $whitelists;
@@ -1323,6 +1325,48 @@ class Google_Service_YouTubePartner extends Google_Service
                   'location' => 'query',
                   'type' => 'boolean',
                 ),
+                'onBehalfOfContentOwner' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->spreadsheetTemplate = new Google_Service_YouTubePartner_SpreadsheetTemplate_Resource(
+        $this,
+        $this->serviceName,
+        'spreadsheetTemplate',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'spreadsheetTemplate',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'locale' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'onBehalfOfContentOwner' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->uploader = new Google_Service_YouTubePartner_Uploader_Resource(
+        $this,
+        $this->serviceName,
+        'uploader',
+        array(
+          'methods' => array(
+            'list' => array(
+              'path' => 'uploader',
+              'httpMethod' => 'GET',
+              'parameters' => array(
                 'onBehalfOfContentOwner' => array(
                   'location' => 'query',
                   'type' => 'string',
@@ -3275,6 +3319,70 @@ class Google_Service_YouTubePartner_References_Resource extends Google_Service_R
     $params = array('referenceId' => $referenceId, 'postBody' => $postBody);
     $params = array_merge($params, $optParams);
     return $this->call('update', array($params), "Google_Service_YouTubePartner_Reference");
+  }
+}
+
+/**
+ * The "spreadsheetTemplate" collection of methods.
+ * Typical usage is:
+ *  <code>
+ *   $youtubePartnerService = new Google_Service_YouTubePartner(...);
+ *   $spreadsheetTemplate = $youtubePartnerService->spreadsheetTemplate;
+ *  </code>
+ */
+class Google_Service_YouTubePartner_SpreadsheetTemplate_Resource extends Google_Service_Resource
+{
+
+  /**
+   * Retrieves a list of spreadsheet templates for a content owner.
+   * (spreadsheetTemplate.listSpreadsheetTemplate)
+   *
+   * @param array $optParams Optional parameters.
+   *
+   * @opt_param string locale The locale parameter identifies the desired language
+   * for templates in the API response. The value is a string that contains a
+   * BCP-47 language code. The default value is en.
+   * @opt_param string onBehalfOfContentOwner The onBehalfOfContentOwner parameter
+   * identifies the content owner that the user is acting on behalf of. This
+   * parameter supports users whose accounts are associated with multiple content
+   * owners.
+   * @return Google_Service_YouTubePartner_SpreadsheetTemplateListResponse
+   */
+  public function listSpreadsheetTemplate($optParams = array())
+  {
+    $params = array();
+    $params = array_merge($params, $optParams);
+    return $this->call('list', array($params), "Google_Service_YouTubePartner_SpreadsheetTemplateListResponse");
+  }
+}
+
+/**
+ * The "uploader" collection of methods.
+ * Typical usage is:
+ *  <code>
+ *   $youtubePartnerService = new Google_Service_YouTubePartner(...);
+ *   $uploader = $youtubePartnerService->uploader;
+ *  </code>
+ */
+class Google_Service_YouTubePartner_Uploader_Resource extends Google_Service_Resource
+{
+
+  /**
+   * Retrieves a list of uploaders for a content owner. (uploader.listUploader)
+   *
+   * @param array $optParams Optional parameters.
+   *
+   * @opt_param string onBehalfOfContentOwner The onBehalfOfContentOwner parameter
+   * identifies the content owner that the user is acting on behalf of. This
+   * parameter supports users whose accounts are associated with multiple content
+   * owners.
+   * @return Google_Service_YouTubePartner_UploaderListResponse
+   */
+  public function listUploader($optParams = array())
+  {
+    $params = array();
+    $params = array_merge($params, $optParams);
+    return $this->call('list', array($params), "Google_Service_YouTubePartner_UploaderListResponse");
   }
 }
 
@@ -5691,10 +5799,13 @@ class Google_Service_YouTubePartner_LiveCuepoint extends Google_Model
 class Google_Service_YouTubePartner_MatchSegment extends Google_Model
 {
   protected $internal_gapi_mappings = array(
+        "manualSegment" => "manual_segment",
         "referenceSegment" => "reference_segment",
         "videoSegment" => "video_segment",
   );
   public $channel;
+  protected $manualSegmentType = 'Google_Service_YouTubePartner_Segment';
+  protected $manualSegmentDataType = '';
   protected $referenceSegmentType = 'Google_Service_YouTubePartner_Segment';
   protected $referenceSegmentDataType = '';
   protected $videoSegmentType = 'Google_Service_YouTubePartner_Segment';
@@ -5708,6 +5819,14 @@ class Google_Service_YouTubePartner_MatchSegment extends Google_Model
   public function getChannel()
   {
     return $this->channel;
+  }
+  public function setManualSegment(Google_Service_YouTubePartner_Segment $manualSegment)
+  {
+    $this->manualSegment = $manualSegment;
+  }
+  public function getManualSegment()
+  {
+    return $this->manualSegment;
   }
   public function setReferenceSegment(Google_Service_YouTubePartner_Segment $referenceSegment)
   {
@@ -6530,7 +6649,7 @@ class Google_Service_YouTubePartner_OwnershipHistoryListResponse extends Google_
 
 class Google_Service_YouTubePartner_Package extends Google_Collection
 {
-  protected $collection_key = 'customIds';
+  protected $collection_key = 'statusReports';
   protected $internal_gapi_mappings = array(
   );
   public $content;
@@ -6540,6 +6659,8 @@ class Google_Service_YouTubePartner_Package extends Google_Collection
   public $locale;
   public $name;
   public $status;
+  protected $statusReportsType = 'Google_Service_YouTubePartner_StatusReport';
+  protected $statusReportsDataType = 'array';
   public $timeCreated;
   public $type;
   public $uploaderName;
@@ -6600,6 +6721,14 @@ class Google_Service_YouTubePartner_Package extends Google_Collection
   public function getStatus()
   {
     return $this->status;
+  }
+  public function setStatusReports($statusReports)
+  {
+    $this->statusReports = $statusReports;
+  }
+  public function getStatusReports()
+  {
+    return $this->statusReports;
   }
   public function setTimeCreated($timeCreated)
   {
@@ -7532,6 +7661,7 @@ class Google_Service_YouTubePartner_Segment extends Google_Model
   protected $internal_gapi_mappings = array(
   );
   public $duration;
+  public $finish;
   public $kind;
   public $start;
 
@@ -7543,6 +7673,14 @@ class Google_Service_YouTubePartner_Segment extends Google_Model
   public function getDuration()
   {
     return $this->duration;
+  }
+  public function setFinish($finish)
+  {
+    $this->finish = $finish;
+  }
+  public function getFinish()
+  {
+    return $this->finish;
   }
   public function setKind($kind)
   {
@@ -7606,6 +7744,96 @@ class Google_Service_YouTubePartner_ShowDetails extends Google_Model
   }
 }
 
+class Google_Service_YouTubePartner_SpreadsheetTemplate extends Google_Model
+{
+  protected $internal_gapi_mappings = array(
+  );
+  public $kind;
+  public $status;
+  public $templateContent;
+  public $templateName;
+  public $templateType;
+
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+  public function getKind()
+  {
+    return $this->kind;
+  }
+  public function setStatus($status)
+  {
+    $this->status = $status;
+  }
+  public function getStatus()
+  {
+    return $this->status;
+  }
+  public function setTemplateContent($templateContent)
+  {
+    $this->templateContent = $templateContent;
+  }
+  public function getTemplateContent()
+  {
+    return $this->templateContent;
+  }
+  public function setTemplateName($templateName)
+  {
+    $this->templateName = $templateName;
+  }
+  public function getTemplateName()
+  {
+    return $this->templateName;
+  }
+  public function setTemplateType($templateType)
+  {
+    $this->templateType = $templateType;
+  }
+  public function getTemplateType()
+  {
+    return $this->templateType;
+  }
+}
+
+class Google_Service_YouTubePartner_SpreadsheetTemplateListResponse extends Google_Collection
+{
+  protected $collection_key = 'items';
+  protected $internal_gapi_mappings = array(
+  );
+  protected $itemsType = 'Google_Service_YouTubePartner_SpreadsheetTemplate';
+  protected $itemsDataType = 'array';
+  public $kind;
+  public $status;
+
+
+  public function setItems($items)
+  {
+    $this->items = $items;
+  }
+  public function getItems()
+  {
+    return $this->items;
+  }
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+  public function getKind()
+  {
+    return $this->kind;
+  }
+  public function setStatus($status)
+  {
+    $this->status = $status;
+  }
+  public function getStatus()
+  {
+    return $this->status;
+  }
+}
+
 class Google_Service_YouTubePartner_StateCompleted extends Google_Model
 {
   protected $internal_gapi_mappings = array(
@@ -7629,6 +7857,32 @@ class Google_Service_YouTubePartner_StateCompleted extends Google_Model
   public function getTimeCompleted()
   {
     return $this->timeCompleted;
+  }
+}
+
+class Google_Service_YouTubePartner_StatusReport extends Google_Model
+{
+  protected $internal_gapi_mappings = array(
+  );
+  public $statusContent;
+  public $statusFileName;
+
+
+  public function setStatusContent($statusContent)
+  {
+    $this->statusContent = $statusContent;
+  }
+  public function getStatusContent()
+  {
+    return $this->statusContent;
+  }
+  public function setStatusFileName($statusFileName)
+  {
+    $this->statusFileName = $statusFileName;
+  }
+  public function getStatusFileName()
+  {
+    return $this->statusFileName;
   }
 }
 
@@ -7738,6 +7992,60 @@ class Google_Service_YouTubePartner_TerritoryOwners extends Google_Collection
   public function getType()
   {
     return $this->type;
+  }
+}
+
+class Google_Service_YouTubePartner_Uploader extends Google_Model
+{
+  protected $internal_gapi_mappings = array(
+  );
+  public $kind;
+  public $uploaderName;
+
+
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+  public function getKind()
+  {
+    return $this->kind;
+  }
+  public function setUploaderName($uploaderName)
+  {
+    $this->uploaderName = $uploaderName;
+  }
+  public function getUploaderName()
+  {
+    return $this->uploaderName;
+  }
+}
+
+class Google_Service_YouTubePartner_UploaderListResponse extends Google_Collection
+{
+  protected $collection_key = 'items';
+  protected $internal_gapi_mappings = array(
+  );
+  protected $itemsType = 'Google_Service_YouTubePartner_Uploader';
+  protected $itemsDataType = 'array';
+  public $kind;
+
+
+  public function setItems($items)
+  {
+    $this->items = $items;
+  }
+  public function getItems()
+  {
+    return $this->items;
+  }
+  public function setKind($kind)
+  {
+    $this->kind = $kind;
+  }
+  public function getKind()
+  {
+    return $this->kind;
   }
 }
 
