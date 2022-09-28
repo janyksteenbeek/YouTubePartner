@@ -3,7 +3,7 @@
     "description": "PHP library for Youtube Content ID API v1",
     "type": "package",
     "require": {
-        "google/apiclient": "~2.4.0|~2.5.0|~2.6.0|~2.7.0"
+        "google/apiclient": "~2.8.0"
     },
     "license": "Apache-2.0",
     "authors": [
