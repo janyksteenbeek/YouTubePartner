@@ -1,0 +1,64 @@
+name: Update Repo with latest YouTube Partner Client Library
+
+on:
+  schedule:
+  - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+jobs:
+  update-repo:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Git
+      run: |
+        git config --global user.name 'Updater [GitHub Actions]'
+        git config --global user.email 'bot@janyk.dev'
+
+    - name: Get the current date
+      run: |
+        echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+    - name: Clear the repository
+      run: |
+        find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name 'composer.json' ! -name 'LICENSE.txt' ! -name '.github' ! -name '.gitignore' -exec rm -rf {} +
+
+    - name: Download the ZIP file
+      run: |
+        base_url="https://developers.google.com"
+        zip_path=$(curl -m 10 -s https://developers.google.com/youtube/partner/client_libraries | sed -n 's/.*href="\([^"]*\.zip\)".*/\1/p' | head -n 1)
+        zip_url="${base_url}${zip_path}"
+        curl -m 10 -L -o google-api.zip "$zip_url"
+
+    - name: Validate the ZIP file
+      run: |
+        if ! unzip -tq google-api.zip; then
+          echo "ZIP file is corrupted or invalid."
+          exit 1
+        fi
+
+    - name: Unzip and replace contents
+      run: |
+        unzip -o google-api.zip -d extracted/
+        mv extracted/* .
+        ls -lsa
+        rm -rf extracted/ google-api.zip
+
+    - name: Commit changes
+      run: |
+        git add -A .
+        git commit -m "Update repository with latest YouTube Partner API client library on $(date +'%Y-%m-%d')" || exit 0
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v7
+      with:
+        branch: "autoupdate/${{ env.DATE }}"
+        title: "Update YouTube Partner API - ${{ env.DATE }}"
+        body: "This PR updates the repository with the latest YouTube Partner API ZIP contents as of ${{ env.DATE }}."
+        labels: 'auto-update'
+        assignees: 'janyksteenbeek'
+        reviewers: 'janyksteenbeek'
